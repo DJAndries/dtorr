@@ -1,0 +1,6 @@
+*.dll
+*.a
+build
+dist
+__pycache__
+env
