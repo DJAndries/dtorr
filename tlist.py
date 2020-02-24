@@ -1,18 +1,28 @@
 import dlib
 import config
 import os
+import threading
+import enum
 
-torrent_list = []
+torrents = {}
+next_id = 1
+torrents_lock = threading.Lock()
 
-download_path = 'D:\\Downloads'
+download_path = 'D:\\Downloads\\dtorr_test'
+
+class Status(enum.Enum):
+  PAUSED = 1
+  DOWNLOADING = 2
+  SEEDING = 3
+  FAILED = 4
 
 class TorrentInstance:
-  def __init__(self, contents, active=True):
-    self.active = active
+  def __init__(self, contents, status=Status.DOWNLOADING):
+    self.status = Status.DOWNLOADING
     self.contents = contents
 
-
 def add_torrent(path):
+  global next_id
   with open(path, 'rb') as f:
     file_contents = f.read()
     torr_struct = dlib.load_torrent_metadata(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config),
@@ -33,17 +43,31 @@ def add_torrent(path):
       raise Exception('Failed to init torrent files. See log for details.')
 
     torrent_instance = TorrentInstance(torr_struct)
-    torrent_list.append(torrent_instance)
 
-    return torrent_instance
+    torrents_lock.acquire()
+    tid = next_id
+    torrents[tid] = torrent_instance
+    next_id += 1
+    torrents_lock.release()
 
+    return tid, torrent_instance
 
-def is_active(index):
-  return torrent_list[index].active
+def get_torrent(tid):
+  return torrents.get(tid, None)
 
-def change_active(index, active):
-  torrent_list[index].active = active
-  return torrent_list[index]
+def is_active(tid, instance=None):
+  if not instance:
+    instance = torrents[tid]
+  return instance.status in (Status.DOWNLOADING, Status.SEEDING)
 
-def delete_torrent(index):
-  torrent_list.pop(index)
+def change_status(tid, status):
+  torrents_lock.acquire()
+  inst = torrents[tid]
+  inst.status = status
+  torrents_lock.release()
+  return inst
+
+def delete_torrent(tid):
+  torrents_lock.acquire()
+  torrents.pop(tid)
+  torrents_lock.release()

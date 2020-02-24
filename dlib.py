@@ -1,7 +1,7 @@
 r"""Wrapper for bencoding_decode.h
 
 Generated with:
-D:\Python37\Scripts\ctypesgen -I ../dtorr/include -L . -ldtorr.dll ../dtorr/include/dtorr/bencoding_decode.h ../dtorr/include/dtorr/bencoding_encode.h ../dtorr/include/dtorr/dtorr.h ../dtorr/include/dtorr/fs.h ../dtorr/include/dtorr/metadata.h ../dtorr/include/dtorr/structs.h -o dlib.py --output-language=py32
+D:\Python37\Scripts\ctypesgen -I ../dtorr/include -L ../dtorr/lib -ldtorr.dll ../dtorr/include/dtorr/bencoding_decode.h ../dtorr/include/dtorr/bencoding_encode.h ../dtorr/include/dtorr/dtorr.h ../dtorr/include/dtorr/fs.h ../dtorr/include/dtorr/manager.h ../dtorr/include/dtorr/metadata.h ../dtorr/include/dtorr/structs.h -o dlib.py --output-language=py32
 
 Do not modify this file.
 """
@@ -340,7 +340,7 @@ class String(MutableString, Union):
 
     _fields_ = [("raw", POINTER(c_char)), ("data", c_char_p)]
 
-    def __init__(self, obj=""):
+    def __init__(self, obj=b""):
         if isinstance(obj, (bytes, UserString)):
             self.data = bytes(obj)
         else:
@@ -444,7 +444,7 @@ def ord_if_char(value):
 # End preamble
 
 _libs = {}
-_libdirs = ['.']
+_libdirs = ['../dtorr/lib']
 
 # Begin loader
 
@@ -808,7 +808,7 @@ del loaderclass
 
 # End loader
 
-add_library_search_dirs(['.'])
+add_library_search_dirs(['../dtorr/lib'])
 
 # Begin libraries
 _libs["dtorr.dll"] = load_library("dtorr.dll")
@@ -993,7 +993,11 @@ struct_dtorr_torrent.__slots__ = [
     'bitfield',
     'decoded',
     'downloaded',
+    'download_rate',
+    'downloaded_interval',
     'uploaded',
+    'upload_rate',
+    'uploaded_interval',
     'tracker_interval_map',
     'peer_map',
     'in_piece_buf_map',
@@ -1004,6 +1008,8 @@ struct_dtorr_torrent.__slots__ = [
     'last_peerstart_time',
     'last_requester_time',
     'last_choke_time',
+    'last_announce_time',
+    'last_metrics_time',
 ]
 struct_dtorr_torrent._fields_ = [
     ('announce', String),
@@ -1018,7 +1024,11 @@ struct_dtorr_torrent._fields_ = [
     ('bitfield', String),
     ('decoded', POINTER(dtorr_node)),
     ('downloaded', c_ulong),
+    ('download_rate', c_ulong),
+    ('downloaded_interval', c_ulong),
     ('uploaded', c_ulong),
+    ('upload_rate', c_ulong),
+    ('uploaded_interval', c_ulong),
     ('tracker_interval_map', POINTER(dtorr_hashmap)),
     ('peer_map', POINTER(dtorr_hashmap)),
     ('in_piece_buf_map', POINTER(POINTER(c_char))),
@@ -1029,11 +1039,13 @@ struct_dtorr_torrent._fields_ = [
     ('last_peerstart_time', c_ulong),
     ('last_requester_time', c_ulong),
     ('last_choke_time', c_ulong),
+    ('last_announce_time', c_ulong),
+    ('last_metrics_time', c_ulong),
 ]
 
-dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 122
+dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 128
 
-# ../dtorr/include/dtorr/structs.h: 124
+# ../dtorr/include/dtorr/structs.h: 130
 class struct_dtorr_piece_request(Structure):
     pass
 
@@ -1050,7 +1062,7 @@ struct_dtorr_piece_request._fields_ = [
     ('request_sent', c_char),
 ]
 
-dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 130
+dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 136
 
 # D:\\Work\\dtorr\\include\\dtorr\\bencoding_decode.h: 6
 if _libs["dtorr.dll"].has("bencoding_decode", "cdecl"):
@@ -1091,6 +1103,12 @@ if _libs["dtorr.dll"].has("rw_piece", "cdecl"):
     rw_piece = _libs["dtorr.dll"].get("rw_piece", "cdecl")
     rw_piece.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent), c_ulong, String, c_ulong, c_char]
     rw_piece.restype = c_int
+
+# D:\\Work\\dtorr\\include\\dtorr\\manager.h: 6
+if _libs["dtorr.dll"].has("manage_torrent", "cdecl"):
+    manage_torrent = _libs["dtorr.dll"].get("manage_torrent", "cdecl")
+    manage_torrent.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent)]
+    manage_torrent.restype = c_int
 
 # D:\\Work\\dtorr\\include\\dtorr\\metadata.h: 6
 if _libs["dtorr.dll"].has("load_torrent_metadata", "cdecl"):
@@ -1146,7 +1164,7 @@ dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 64
 
 dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 90
 
-dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 124
+dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 130
 
 # No inserted files
 

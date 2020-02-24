@@ -2,101 +2,173 @@ import wx
 import dlib
 import tlist
 import util
-from forms import MainFrame, SummaryPanel
-
+import manage
+import details
+import config
+import log
+import sys
+from forms import MainFrame
 
 app = wx.App()
 
-# f = open('../dtorr/test/torrents/3.torrent', 'rb')
-# torr = f.read()
+manage_thread = manage.TorrentManageThread()
 
-# print(torr)
-# dtorr_config = ctypeslib.dtorr_config(log_level=4, log_handler=ctypes.CFUNCTYPE(ctypeslib.UNCHECKED(None), ctypes.c_int, ctypeslib.String)(0))
-# # torrentenc = ctypes.POINTER(ctypes.c_char)(ctypes.c_char('abcde'))
-# try:
-#   dec_torr = ctypeslib.load_torrent_metadata(ctypes.POINTER(ctypeslib.dtorr_config)(dtorr_config), ctypeslib.String(ctypeslib.UserString(torr)), ctypes.c_ulong(len(torr)))
-#   ctypeslib.dtorr_init(ctypes.POINTER(ctypeslib.dtorr_config)(dtorr_config))
-#   print('ye')
-#   print(dec_torr.contents.name)
-# except Exception as e:
-#   print(e)
-#   pass
 class FullMainFrame(MainFrame):
   def __init__(self, parent):
     MainFrame.__init__(self, parent)
     self.initListColumns()
-    self.updateMenuItems(wx.NOT_FOUND)
+    self.updateMenuItems(0)
+    self.logsShown = False
+    self.logsPaused = False
 
   def initListColumns(self):
     self.torrentList.AppendTextColumn('Name', width=250)
     self.torrentList.AppendTextColumn('Size', width=75)
     self.torrentList.AppendTextColumn('Status', width=125)
     self.torrentList.AppendProgressColumn('Progress', align=wx.ALIGN_CENTER, width=200)
+    self.torrentList.AppendTextColumn('DL Rate', width=80)
+    self.torrentList.AppendTextColumn('UL Rate', width=80)
+    self.torrentList.AppendTextColumn('ETA', width=80)
     self.torrentList.AppendTextColumn('Infohash', width=200)
 
-  def updateMenuItems(self, selectedRow):
-    if selectedRow == wx.NOT_FOUND:
+  def updateMenuItems(self, tid):
+    if tid == 0:
       self.toolbar.EnableTool(self.resumeButton.GetId(), False)
       self.toolbar.EnableTool(self.pauseButton.GetId(), False)
       self.toolbar.EnableTool(self.deleteButton.GetId(), False)
       return
-    isDownloading = tlist.is_active(selectedRow)
+    isDownloading = tlist.is_active(tid)
     self.toolbar.EnableTool(self.resumeButton.GetId(), not isDownloading)
     self.toolbar.EnableTool(self.pauseButton.GetId(), isDownloading)
     self.toolbar.EnableTool(self.deleteButton.GetId(), True)
 
-  def statusLabel(self, torr_instance):
-    return 'Downloading' if torr_instance.active else 'Paused'
+  def logToggle(self, event):
+    self.logsShown = event.IsChecked()
+    self.logPanel.Show(self.logsShown)
+    self.SendSizeEvent()
 
-  def addTorrentToList(self, torr_instance):
+  def statusLabel(self, torr_instance):
+    return torr_instance.status.name.lower().capitalize()
+
+  def addTorrentToList(self, tid, torr_instance):
     self.torrentList.AppendItem((str(torr_instance.contents.contents.name),
                                  util.human_byte_quantity(int(torr_instance.contents.contents.length), 'B'),
                                  self.statusLabel(torr_instance),
                                  0,
-                                 bytes(torr_instance.contents.contents.infohash).hex()))
+                                 '', '', '',
+                                 bytes(torr_instance.contents.contents.infohash).hex()), tid)
 
   def updateTorrentInList(self, index, torr_instance):
     self.torrentList.SetValue(self.statusLabel(torr_instance), index, 2)
+    is_active = tlist.is_active(None, torr_instance)
+    upload_rate = ''
+    download_rate = ''
+    eta = ''
+
+    progress = int(torr_instance.contents.contents.downloaded) / int(torr_instance.contents.contents.length) * 100
+    self.torrentList.SetValue(progress, index, 3)
+
+    if is_active:
+      upload_rate = util.human_byte_quantity(int(torr_instance.contents.contents.upload_rate), 'B/s')
+      download_rate = util.human_byte_quantity(int(torr_instance.contents.contents.download_rate), 'B/s')
+      eta = util.eta(int(torr_instance.contents.contents.downloaded),
+                     int(torr_instance.contents.contents.length),
+                     int(torr_instance.contents.contents.download_rate))
+
+    self.torrentList.SetTextValue(download_rate, index, 4)
+    self.torrentList.SetTextValue(upload_rate, index, 5)
+    self.torrentList.SetTextValue(eta, index, 6)
+
+  def selectedTid(self):
+    selected_item = self.torrentList.GetSelection()
+    if selected_item:
+      return self.torrentList.GetItemData(selected_item)
+    return 0
+
+  def logPause(self, event):
+    self.logsPaused = event.IsChecked()
+
+  def updateLogText(self):
+    if not log.log_new or not self.logsShown or self.logsPaused:
+      return
+    log.log_new = False
+    self.logText.SetValue(log.log_buf)
+    self.logText.SetInsertionPoint(-1)
+
+  def intervalUpdate(self, event):
+    tlist.torrents_lock.acquire()
+    selected_id = self.selectedTid()
+    for i in range(self.torrentList.GetItemCount()):
+      tid = self.torrentList.GetItemData(self.torrentList.RowToItem(i))
+      torr_instance = tlist.torrents[tid]
+      if not tlist.is_active(tid):
+        continue
+      if selected_id == tid:
+        details.update_summary(torr_instance)
+      self.updateTorrentInList(i, torr_instance)
+      self.updateLogText()
+    tlist.torrents_lock.release()
 
   def delTorrentFromList(self, index):
     self.torrentList.DeleteItem(index)
 
   def torrentSelected(self, event):
-    self.updateMenuItems(self.torrentList.GetSelectedRow())
+    tlist.torrents_lock.acquire()
+    tid = self.selectedTid()
+    self.updateMenuItems(tid)
+    details.update_summary(tlist.get_torrent(tid), True)
+    tlist.torrents_lock.release()
+
+  def changeTorrentStatus(self, target_stat):
+    tid = self.selectedTid()
+    instance = tlist.change_status(tid, target_stat)
+    tlist.torrents_lock.acquire()
+    self.updateTorrentInList(self.torrentList.GetSelectedRow(), instance)
+    details.update_summary(instance)
+    self.updateMenuItems(tid)
+    tlist.torrents_lock.release()
 
   def pauseTorrent(self, event):
-    index = self.torrentList.GetSelectedRow()
-    self.updateTorrentInList(index, tlist.change_active(index, False))
-    self.updateMenuItems(index)
+    self.changeTorrentStatus(tlist.Status.PAUSED)
 
   def resumeTorrent(self, event):
-    index = self.torrentList.GetSelectedRow()
-    self.updateTorrentInList(index, tlist.change_active(index, True))
-    self.updateMenuItems(index)
+    self.changeTorrentStatus(tlist.Status.DOWNLOADING)
 
   def deleteTorrent(self, event):
-    index = self.torrentList.GetSelectedRow()
-    tlist.delete_torrent(index)
-    self.delTorrentFromList(index)
+    tlist.delete_torrent(self.selectedTid())
+    details.update_summary(None, True)
+    self.delTorrentFromList(self.torrentList.GetSelectedRow())
 
   def addTorrent(self, event):
     dialog = wx.FileDialog(self, wildcard='Torrent files (*.torrent)|*.torrent', style=wx.FD_OPEN)
     if dialog.ShowModal() == wx.ID_CANCEL:
       return
     try:
-      torr_instance = tlist.add_torrent(dialog.GetPath())
+      tid, torr_instance = tlist.add_torrent(dialog.GetPath())
     except Exception as e:
-      wx.MessageDialog(self, 'Failed to load torrent: %s' % e, style=wx.OK | wx.ICON_ERROR).ShowModal()
+      wx.MessageDialog(self, 'Failed to load torrent: {}'.format(e), style=wx.OK | wx.ICON_ERROR).ShowModal()
       return
-    self.addTorrentToList(torr_instance)
+    self.addTorrentToList(tid, torr_instance)
+
+  def logLevelChanged(self, event):
+    tlist.torrents_lock.acquire()
+    config.dtorr_config.log_level = event.GetSelection() + 1
+    tlist.torrents_lock.release()
 
   def exitApp(self, event):
-    quit()
+    manage_thread.stop()
+    sys.exit()
 
 
 frame = FullMainFrame(None)
-frame.torrentDetailsNotebook.AddPage(SummaryPanel(frame.torrentDetailsNotebook), "Summary", True, 0)
+
+details.populate_notebook(frame.torrentDetailsNotebook)
+
 frame.SetIcon(wx.Icon('icons/dt.png'))
 
 frame.Show(True)
+
+manage_thread.start()
+
 app.MainLoop()
+
