@@ -17,11 +17,11 @@ class Status(enum.Enum):
   FAILED = 4
 
 class TorrentInstance:
-  def __init__(self, contents, status=Status.DOWNLOADING):
-    self.status = Status.DOWNLOADING
+  def __init__(self, contents, status):
+    self.status = status
     self.contents = contents
 
-def add_torrent(path):
+def add_torrent(path, tid=None, status=Status.DOWNLOADING):
   global next_id
   with open(path, 'rb') as f:
     file_contents = f.read()
@@ -42,12 +42,17 @@ def add_torrent(path):
     if dlib.init_torrent_files(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config), torr_struct) != 0:
       raise Exception('Failed to init torrent files. See log for details.')
 
-    torrent_instance = TorrentInstance(torr_struct)
+    torrent_instance = TorrentInstance(torr_struct, status)
 
     torrents_lock.acquire()
-    tid = next_id
+    if not tid:
+      tid = next_id
+
     torrents[tid] = torrent_instance
-    next_id += 1
+
+    if tid >= next_id:
+      next_id = tid + 1
+
     torrents_lock.release()
 
     return tid, torrent_instance

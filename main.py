@@ -7,6 +7,7 @@ import details
 import config
 import log
 import sys
+import state
 from forms import MainFrame
 
 app = wx.App()
@@ -20,6 +21,12 @@ class FullMainFrame(MainFrame):
     self.updateMenuItems(0)
     self.logsShown = False
     self.logsPaused = False
+
+    if dlib.dtorr_init() != 0:
+      wx.MessageDialog(self, 'Failed to init library'.format(e), style=wx.OK | wx.ICON_ERROR).ShowModal()
+
+    state.load_state()
+    self.renderFullList()
 
   def initListColumns(self):
     self.torrentList.AppendTextColumn('Name', width=250)
@@ -78,6 +85,13 @@ class FullMainFrame(MainFrame):
     self.torrentList.SetTextValue(download_rate, index, 4)
     self.torrentList.SetTextValue(upload_rate, index, 5)
     self.torrentList.SetTextValue(eta, index, 6)
+
+  def renderFullList(self):
+    self.torrentList.DeleteAllItems()
+    tlist.torrents_lock.acquire()
+    for tid, torrent in tlist.torrents.items():
+      self.addTorrentToList(tid, torrent)
+    tlist.torrents_lock.release()
 
   def selectedTid(self):
     selected_item = self.torrentList.GetSelection()
@@ -157,6 +171,7 @@ class FullMainFrame(MainFrame):
 
   def exitApp(self, event):
     manage_thread.stop()
+    state.save_state()
     sys.exit()
 
 
