@@ -8,6 +8,7 @@ import config
 import log
 import sys
 import state
+import port
 from forms import MainFrame
 
 app = wx.App()
@@ -22,10 +23,6 @@ class FullMainFrame(MainFrame):
     self.logsShown = False
     self.logsPaused = False
 
-    if dlib.dtorr_init() != 0:
-      wx.MessageDialog(self, 'Failed to init library'.format(e), style=wx.OK | wx.ICON_ERROR).ShowModal()
-
-    state.load_state()
     self.renderFullList()
 
   def initListColumns(self):
@@ -48,6 +45,14 @@ class FullMainFrame(MainFrame):
     self.toolbar.EnableTool(self.resumeButton.GetId(), not isDownloading)
     self.toolbar.EnableTool(self.pauseButton.GetId(), isDownloading)
     self.toolbar.EnableTool(self.deleteButton.GetId(), True)
+
+  def updateStatusBar(self):
+    self.statusBar.SetStatusText('UPnP: {}, {}'.format(
+      'Available' if port.port_info.upnp_avail else 'N/A',
+      'port mapped' if port.port_info.mapped_port else 'mapping failed', 0))
+
+    self.statusBar.SetStatusText('External IP/Port: {}:{}'.format(
+      port.port_info.ip or 'Unknown', port.port_info.port or 'Unknown'), 1)
 
   def logToggle(self, event):
     self.logsShown = event.IsChecked()
@@ -172,8 +177,8 @@ class FullMainFrame(MainFrame):
   def exitApp(self, event):
     manage_thread.stop()
     state.save_state()
+    port.clean_port()
     sys.exit()
-
 
 frame = FullMainFrame(None)
 
@@ -181,7 +186,24 @@ details.populate_notebook(frame.torrentDetailsNotebook)
 
 frame.SetIcon(wx.Icon('icons/dt.png'))
 
+if dlib.dtorr_init() != 0:
+  frame.Show(True)
+  wx.MessageDialog(frame, 'Failed to init library'.format(e), style=wx.OK | wx.ICON_ERROR).ShowModal()
+  sys.exit(1)
+
+port.prep_port()
+if port.port_info.port == None:
+  frame.Show(True)
+  wx.MessageDialog(frame, 'Failed to find open port', style=wx.OK | wx.ICON_ERROR).ShowModal()
+  sys.exit(1)
+
+state.load_state()
+
 frame.Show(True)
+frame.updateStatusBar()
+frame.renderFullList()
+
+config.dtorr_config.port = port.port_info.port
 
 manage_thread.start()
 

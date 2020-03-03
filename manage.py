@@ -4,17 +4,35 @@ import tlist
 import time
 import config
 
+def torrent_lookup(infohash):
+  infohash_hexed = bytes(infohash)[:20].hex()
+  if infohash_hexed not in tlist.hash_to_torrent:
+    return 0
+
+  torrent = tlist.hash_to_torrent[infohash_hexed]
+
+  if not tlist.is_active(None, torrent):
+    return 0
+  return dlib.addressof(torrent.contents.contents)
+
 class TorrentManageThread(threading.Thread):
   def __init__(self):
     threading.Thread.__init__(self)
     self.is_running = True
 
   def run(self):
+    config.dtorr_config.torrent_lookup = dlib.CFUNCTYPE(dlib.UNCHECKED(dlib.POINTER(dlib.dtorr_torrent)), dlib.String)(torrent_lookup)
+
+    dlib.peer_server_start(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config))
+
     while True:
       if not self.is_running:
         return
 
       tlist.torrents_lock.acquire()
+
+      dlib.peer_server_accept(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config))
+
       for torrent_instance in tlist.torrents.values():
         if not tlist.is_active(None, torrent_instance):
           continue

@@ -172,7 +172,7 @@ class MainFrame ( wx.Frame ):
 
 		self.SetSizer( mainSizer )
 		self.Layout()
-		self.m_statusBar3 = self.CreateStatusBar( 1, wx.STB_SIZEGRIP, wx.ID_ANY )
+		self.statusBar = self.CreateStatusBar( 3, wx.STB_SIZEGRIP, wx.ID_ANY )
 		self.refreshTimer = wx.Timer()
 		self.refreshTimer.SetOwner( self, wx.ID_ANY )
 		self.refreshTimer.Start( 2500 )

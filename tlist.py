@@ -3,8 +3,10 @@ import config
 import os
 import threading
 import enum
+import port
 
 torrents = {}
+hash_to_torrent = {}
 next_id = 1
 torrents_lock = threading.Lock()
 
@@ -37,6 +39,10 @@ def add_torrent(path, tid=None, status=Status.DOWNLOADING):
 
     torr_struct.contents.download_dir = dlib.String(dlib.UserString(download_dir))
 
+    torr_struct.contents.me.ip = (port.port_info.ip or '0.0.0.0').encode()
+    torr_struct.contents.me.port = port.port_info.port
+    torr_struct.contents.me.peer_id = os.urandom(20)
+
     os.makedirs(download_dir, exist_ok=True)
 
     if dlib.init_torrent_files(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config), torr_struct) != 0:
@@ -49,6 +55,7 @@ def add_torrent(path, tid=None, status=Status.DOWNLOADING):
       tid = next_id
 
     torrents[tid] = torrent_instance
+    hash_to_torrent[bytes(torr_struct.contents.infohash).hex()] = torrent_instance
 
     if tid >= next_id:
       next_id = tid + 1
@@ -74,5 +81,7 @@ def change_status(tid, status):
 
 def delete_torrent(tid):
   torrents_lock.acquire()
+  torrent = torrents[tid]
+  hash_to_torrent.pop(bytes(torrent.contents.contents.infohash).hex())
   torrents.pop(tid)
   torrents_lock.release()
