@@ -4,13 +4,12 @@ import os
 import threading
 import enum
 import port
+import prefs
 
 torrents = {}
 hash_to_torrent = {}
 next_id = 1
 torrents_lock = threading.Lock()
-
-download_path = 'D:\\Downloads\\dtorr_test'
 
 class Status(enum.Enum):
   PAUSED = 1
@@ -33,7 +32,7 @@ def add_torrent(path, tid=None, status=Status.DOWNLOADING):
     if not torr_struct:
       raise Exception('Error loading torrent. See log for details.')
 
-    download_dir = download_path
+    download_dir = prefs.prefs['download_dir']
     if torr_struct.contents.file_count > 1:
       download_dir = os.path.join(download_dir, str(torr_struct.contents.name))
 

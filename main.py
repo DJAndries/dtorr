@@ -5,11 +5,12 @@ import util
 import manage
 import details
 import config
+import prefs
 import log
 import sys
 import state
 import port
-from forms import MainFrame
+from forms import MainFrame, PrefDialog
 
 app = wx.App()
 
@@ -173,6 +174,9 @@ class FullMainFrame(MainFrame):
     tlist.torrents_lock.acquire()
     config.dtorr_config.log_level = event.GetSelection() + 1
     tlist.torrents_lock.release()
+
+  def showPrefs(self, event):
+    prefs.show_editor(self)
 
   def exitApp(self, event):
     manage_thread.stop()

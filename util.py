@@ -1,4 +1,6 @@
 import datetime
+import os
+from sys import platform
 
 def human_byte_quantity(size, suffix):
   for unit in ['','K','M','G','T','P','E','Z']:
@@ -13,3 +15,8 @@ def eta(downloaded, total, dl_rate):
   seconds_left = round((total - downloaded) / dl_rate)
   delta = datetime.timedelta(seconds=seconds_left)
   return str(delta)
+
+def get_app_path():
+  app_path = os.path.expanduser('~/AppData/Roaming/dtorr' if platform in ('win32', 'cygwin') else '~/.dtorr')
+  os.makedirs(app_path, exist_ok=True)
+  return app_path

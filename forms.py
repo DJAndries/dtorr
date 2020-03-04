@@ -183,10 +183,12 @@ class MainFrame ( wx.Frame ):
 		# Connect Events
 		self.Bind( wx.EVT_CLOSE, self.exitApp )
 		self.Bind( wx.EVT_MENU, self.addTorrent, id = self.addTorrentMenuItem.GetId() )
+		self.Bind( wx.EVT_MENU, self.showPrefs, id = self.prefMenuItem.GetId() )
 		self.Bind( wx.EVT_TOOL, self.addTorrent, id = self.addButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.deleteTorrent, id = self.deleteButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.resumeTorrent, id = self.resumeButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.pauseTorrent, id = self.pauseButton.GetId() )
+		self.Bind( wx.EVT_TOOL, self.showPrefs, id = self.prefButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.logToggle, id = self.m_tool7.GetId() )
 		self.Bind( wx.EVT_TOOL, self.exitApp, id = self.exitButton.GetId() )
 		self.torrentList.Bind( wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.torrentSelected, id = wx.ID_ANY )
@@ -205,6 +207,9 @@ class MainFrame ( wx.Frame ):
 	def addTorrent( self, event ):
 		event.Skip()
 
+	def showPrefs( self, event ):
+		event.Skip()
+
 
 	def deleteTorrent( self, event ):
 		event.Skip()
@@ -214,6 +219,7 @@ class MainFrame ( wx.Frame ):
 
 	def pauseTorrent( self, event ):
 		event.Skip()
+
 
 	def logToggle( self, event ):
 		event.Skip()
@@ -517,5 +523,109 @@ class SummaryPanel ( wx.Panel ):
 
 	def __del__( self ):
 		pass
+
+
+###########################################################################
+## Class PrefDialog
+###########################################################################
+
+class PrefDialog ( wx.Dialog ):
+
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Preferences", pos = wx.DefaultPosition, size = wx.Size( 443,296 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+
+		self.SetSizeHints( wx.Size( -1,-1 ), wx.DefaultSize )
+
+		bSizer35 = wx.BoxSizer( wx.VERTICAL )
+
+		self.m_panel6 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		bSizer27 = wx.BoxSizer( wx.VERTICAL )
+
+		bSizer27.SetMinSize( wx.Size( 443,296 ) )
+		bSizer30 = wx.BoxSizer( wx.VERTICAL )
+
+		self.randomPortCheckBox = wx.CheckBox( self.m_panel6, wx.ID_ANY, u"Choose random port", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.randomPortCheckBox.SetValue(True)
+		bSizer30.Add( self.randomPortCheckBox, 0, wx.ALL, 5 )
+
+		bSizer32 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticText261 = wx.StaticText( self.m_panel6, wx.ID_ANY, u"Listening port:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText261.Wrap( -1 )
+
+		bSizer32.Add( self.m_staticText261, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+		self.listeningPortText = wx.TextCtrl( self.m_panel6, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.listeningPortText.Enable( False )
+
+		bSizer32.Add( self.listeningPortText, 0, wx.ALL, 5 )
+
+
+		bSizer30.Add( bSizer32, 0, wx.EXPAND, 5 )
+
+		self.upnpCheckBox = wx.CheckBox( self.m_panel6, wx.ID_ANY, u"UPnP (Port Forwarding)", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.upnpCheckBox.SetValue(True)
+		bSizer30.Add( self.upnpCheckBox, 0, wx.ALL, 5 )
+
+		bSizer33 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticText27 = wx.StaticText( self.m_panel6, wx.ID_ANY, u"Download directory:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText27.Wrap( -1 )
+
+		bSizer33.Add( self.m_staticText27, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+		self.downloadDirCtrl = wx.DirPickerCtrl( self.m_panel6, wx.ID_ANY, wx.EmptyString, u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
+		bSizer33.Add( self.downloadDirCtrl, 1, wx.ALL, 5 )
+
+
+		bSizer30.Add( bSizer33, 0, wx.EXPAND, 5 )
+
+
+		bSizer27.Add( bSizer30, 1, wx.EXPAND, 5 )
+
+		bSizer28 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+		bSizer28.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+		self.saveBtn = wx.Button( self.m_panel6, wx.ID_ANY, u"Save", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer28.Add( self.saveBtn, 0, wx.ALL, 5 )
+
+		self.cancelBtn = wx.Button( self.m_panel6, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer28.Add( self.cancelBtn, 0, wx.ALL, 5 )
+
+
+		bSizer27.Add( bSizer28, 0, wx.EXPAND, 5 )
+
+
+		self.m_panel6.SetSizer( bSizer27 )
+		self.m_panel6.Layout()
+		bSizer27.Fit( self.m_panel6 )
+		bSizer35.Add( self.m_panel6, 1, wx.EXPAND |wx.ALL, 5 )
+
+
+		self.SetSizer( bSizer35 )
+		self.Layout()
+
+		self.Centre( wx.BOTH )
+
+		# Connect Events
+		self.randomPortCheckBox.Bind( wx.EVT_CHECKBOX, self.randomPortChanged )
+		self.saveBtn.Bind( wx.EVT_BUTTON, self.save )
+		self.cancelBtn.Bind( wx.EVT_BUTTON, self.cancel )
+
+	def __del__( self ):
+		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def randomPortChanged( self, event ):
+		event.Skip()
+
+	def save( self, event ):
+		event.Skip()
+
+	def cancel( self, event ):
+		event.Skip()
 
 

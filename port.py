@@ -1,6 +1,7 @@
 import miniupnpc
 import socket
 import random
+import prefs
 
 u = None
 port_info = None
@@ -39,7 +40,6 @@ def is_port_used(port):
     return s.connect_ex(('127.0.0.1', port)) == 0
 
 def find_random_unused_port():
-
   max_tries = 4000
   for i in range(max_tries):
     port = random.randint(10000, 60000)
@@ -68,9 +68,16 @@ def upnp_del_mapping(port_info):
 def prep_port():
   global port_info
   port_info = PortInfo()
-  port_info.upnp_avail = init_upnp()
+  port_info.upnp_avail = False
 
-  port_info.port = find_random_unused_port()
+  if prefs.prefs['upnp']:
+    port_info.upnp_avail = init_upnp()
+
+  if prefs.prefs['random_port']:
+    port_info.port = find_random_unused_port()
+  elif prefs.prefs['port']:
+    port_info.port = int(prefs.prefs['port'])
+
   if port_info.port == None:
     return port_info
 

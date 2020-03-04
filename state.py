@@ -1,12 +1,11 @@
-from sys import platform
 import os
 import tlist
 import yaml
 import dlib
 import config
+import util
 
-app_path = os.path.expanduser('~/AppData/Roaming/dtorr' if platform in ('win32', 'cygwin') else '~/.dtorr')
-os.makedirs(app_path, exist_ok=True)
+app_path = util.get_app_path()
 os.makedirs(os.path.join(app_path, 'torrents'), exist_ok=True)
 
 state_path = os.path.join(app_path, 'state.yml')
@@ -25,7 +24,7 @@ def load_state():
 
   for tid, torrent in torrents.items():
     try:
-      tlist.add_torrent(os.path.join(app_path, 'torrents/{}.torrent'.format(tid)), tid,
+      tlist.add_torrent(os.path.join(app_path, 'torrents', '{}.torrent'.format(tid)), tid,
                         tlist.Status[torrent['status']])
     except:
       pass
@@ -42,7 +41,7 @@ def save_state():
     if result_len.value == 0:
       continue
 
-    with open(os.path.join(app_path, 'torrents/{}.torrent'.format(tid)), 'wb') as f:
+    with open(os.path.join(app_path, 'torrents', '{}.torrent'.format(tid)), 'wb') as f:
       f.write(torr_enc.raw[:result_len.value])
 
     dlib.mfree(torr_enc.raw)
