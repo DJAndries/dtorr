@@ -1,5 +1,5 @@
 import util
-import tlist
+import store
 from forms import SummaryPanel
 
 summary = None
@@ -51,7 +51,7 @@ def update_summary_stats(torr_instance):
                          float(torr_instance.contents.contents.length) * 100, 2)
     progress_text = '{}%'.format(progress_val)
 
-    if tlist.is_active(None, torr_instance):
+    if store.is_active(None, torr_instance):
       dl_rate = util.human_byte_quantity(int(torr_instance.contents.contents.download_rate), 'B/s')
       ul_rate = util.human_byte_quantity(int(torr_instance.contents.contents.upload_rate), 'B/s')
       data_dl = util.human_byte_quantity(torr_instance.contents.contents.downloaded, 'B')

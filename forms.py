@@ -80,39 +80,13 @@ class MainFrame ( wx.Frame ):
 		self.m_splitter2.SetSashGravity( 1 )
 		self.m_splitter2.Bind( wx.EVT_IDLE, self.m_splitter2OnIdle )
 
-		self.m_panel2 = wx.Panel( self.m_splitter2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
-
-		self.m_splitter3 = wx.SplitterWindow( self.m_panel2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SP_3D )
-		self.m_splitter3.Bind( wx.EVT_IDLE, self.m_splitter3OnIdle )
-
-		self.m_panel5 = wx.Panel( self.m_splitter3, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TAB_TRAVERSAL )
-		bSizer7 = wx.BoxSizer( wx.VERTICAL )
-
-		self.torrentStatusList = wx.TreeCtrl( self.m_panel5, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TR_DEFAULT_STYLE )
-		bSizer7.Add( self.torrentStatusList, 1, wx.ALL|wx.EXPAND, 5 )
+		self.listPanelCtr = wx.Panel( self.m_splitter2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		listSizer = wx.BoxSizer( wx.VERTICAL )
 
 
-		self.m_panel5.SetSizer( bSizer7 )
-		self.m_panel5.Layout()
-		bSizer7.Fit( self.m_panel5 )
-		self.m_panel6 = wx.Panel( self.m_splitter3, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		bSizer8 = wx.BoxSizer( wx.VERTICAL )
-
-		self.torrentList = wx.dataview.DataViewListCtrl( self.m_panel6, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer8.Add( self.torrentList, 1, wx.ALL|wx.EXPAND, 5 )
-
-
-		self.m_panel6.SetSizer( bSizer8 )
-		self.m_panel6.Layout()
-		bSizer8.Fit( self.m_panel6 )
-		self.m_splitter3.SplitVertically( self.m_panel5, self.m_panel6, 229 )
-		bSizer2.Add( self.m_splitter3, 1, wx.EXPAND, 5 )
-
-
-		self.m_panel2.SetSizer( bSizer2 )
-		self.m_panel2.Layout()
-		bSizer2.Fit( self.m_panel2 )
+		self.listPanelCtr.SetSizer( listSizer )
+		self.listPanelCtr.Layout()
+		listSizer.Fit( self.listPanelCtr )
 		self.m_panel3 = wx.Panel( self.m_splitter2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
@@ -124,7 +98,7 @@ class MainFrame ( wx.Frame ):
 		self.m_panel3.SetSizer( bSizer6 )
 		self.m_panel3.Layout()
 		bSizer6.Fit( self.m_panel3 )
-		self.m_splitter2.SplitHorizontally( self.m_panel2, self.m_panel3, 450 )
+		self.m_splitter2.SplitHorizontally( self.listPanelCtr, self.m_panel3, 450 )
 		mainSizer.Add( self.m_splitter2, 2, wx.EXPAND, 5 )
 
 		self.logPanel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -191,7 +165,6 @@ class MainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_TOOL, self.showPrefs, id = self.prefButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.logToggle, id = self.m_tool7.GetId() )
 		self.Bind( wx.EVT_TOOL, self.exitApp, id = self.exitButton.GetId() )
-		self.torrentList.Bind( wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.torrentSelected, id = wx.ID_ANY )
 		self.m_choice1.Bind( wx.EVT_CHOICE, self.logLevelChanged )
 		self.logPauseBtn.Bind( wx.EVT_TOGGLEBUTTON, self.logPause )
 		self.Bind( wx.EVT_TIMER, self.intervalUpdate, id=wx.ID_ANY )
@@ -225,9 +198,6 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 
 
-	def torrentSelected( self, event ):
-		event.Skip()
-
 	def logLevelChanged( self, event ):
 		event.Skip()
 
@@ -240,10 +210,6 @@ class MainFrame ( wx.Frame ):
 	def m_splitter2OnIdle( self, event ):
 		self.m_splitter2.SetSashPosition( 450 )
 		self.m_splitter2.Unbind( wx.EVT_IDLE )
-
-	def m_splitter3OnIdle( self, event ):
-		self.m_splitter3.SetSashPosition( 229 )
-		self.m_splitter3.Unbind( wx.EVT_IDLE )
 
 
 ###########################################################################
@@ -556,6 +522,7 @@ class PrefDialog ( wx.Dialog ):
 		bSizer32.Add( self.m_staticText261, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
 		self.listeningPortText = wx.TextCtrl( self.m_panel6, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.listeningPortText.SetMaxLength( 5 )
 		self.listeningPortText.Enable( False )
 
 		bSizer32.Add( self.listeningPortText, 0, wx.ALL, 5 )
@@ -627,5 +594,66 @@ class PrefDialog ( wx.Dialog ):
 
 	def cancel( self, event ):
 		event.Skip()
+
+
+###########################################################################
+## Class ListPanel
+###########################################################################
+
+class ListPanel ( wx.Panel ):
+
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+
+		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_splitter3 = wx.SplitterWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SP_3D )
+		self.m_splitter3.Bind( wx.EVT_IDLE, self.m_splitter3OnIdle )
+
+		self.m_panel5 = wx.Panel( self.m_splitter3, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TAB_TRAVERSAL )
+		bSizer7 = wx.BoxSizer( wx.VERTICAL )
+
+		self.torrentStatusList = wx.TreeCtrl( self.m_panel5, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TR_DEFAULT_STYLE )
+		bSizer7.Add( self.torrentStatusList, 1, wx.ALL|wx.EXPAND, 5 )
+
+
+		self.m_panel5.SetSizer( bSizer7 )
+		self.m_panel5.Layout()
+		bSizer7.Fit( self.m_panel5 )
+		self.m_panel6 = wx.Panel( self.m_splitter3, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		bSizer8 = wx.BoxSizer( wx.VERTICAL )
+
+		self.torrentList = wx.dataview.DataViewListCtrl( self.m_panel6, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer8.Add( self.torrentList, 1, wx.ALL|wx.EXPAND, 5 )
+
+
+		self.m_panel6.SetSizer( bSizer8 )
+		self.m_panel6.Layout()
+		bSizer8.Fit( self.m_panel6 )
+		self.m_splitter3.SplitVertically( self.m_panel5, self.m_panel6, 229 )
+		bSizer2.Add( self.m_splitter3, 1, wx.EXPAND, 5 )
+
+
+		self.SetSizer( bSizer2 )
+		self.Layout()
+
+		# Connect Events
+		self.torrentStatusList.Bind( wx.EVT_TREE_SEL_CHANGED, self.statusSelected )
+		self.torrentList.Bind( wx.dataview.EVT_DATAVIEW_SELECTION_CHANGED, self.torrentSelected, id = wx.ID_ANY )
+
+	def __del__( self ):
+		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def statusSelected( self, event ):
+		event.Skip()
+
+	def torrentSelected( self, event ):
+		event.Skip()
+
+	def m_splitter3OnIdle( self, event ):
+		self.m_splitter3.SetSashPosition( 229 )
+		self.m_splitter3.Unbind( wx.EVT_IDLE )
 
 

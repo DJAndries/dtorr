@@ -1,5 +1,5 @@
 import os
-import tlist
+import store
 import yaml
 import dlib
 import config
@@ -24,17 +24,17 @@ def load_state():
 
   for tid, torrent in torrents.items():
     try:
-      tlist.add_torrent(os.path.join(app_path, 'torrents', '{}.torrent'.format(tid)), tid,
-                        tlist.Status[torrent['status']])
+      store.add_torrent(os.path.join(app_path, 'torrents', '{}.torrent'.format(tid)), tid,
+                        store.Status[torrent['status']])
     except:
       pass
 
 def save_state():
   state = { 'torrents': {} }
 
-  tlist.torrents_lock.acquire()
+  store.torrents_lock.acquire()
 
-  for tid, torrent in tlist.torrents.items():
+  for tid, torrent in store.torrents.items():
     result_len = dlib.c_ulong(0)
     torr_enc = dlib.save_state(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config), torrent.contents,
                                dlib.POINTER(dlib.c_ulong)(result_len))
@@ -51,4 +51,4 @@ def save_state():
   with open(state_path, 'w') as f:
     yaml.dump(state, f)
 
-  tlist.torrents_lock.release()
+  store.torrents_lock.release()
