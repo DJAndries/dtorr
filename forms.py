@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Oct 26 2018)
+## Python code generated with wxFormBuilder (version Jun 19 2020)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -147,6 +147,8 @@ class MainFrame ( wx.Frame ):
 		self.SetSizer( mainSizer )
 		self.Layout()
 		self.statusBar = self.CreateStatusBar( 3, wx.STB_SIZEGRIP, wx.ID_ANY )
+		self.statusBar.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
+
 		self.refreshTimer = wx.Timer()
 		self.refreshTimer.SetOwner( self, wx.ID_ANY )
 		self.refreshTimer.Start( 2500 )
@@ -158,6 +160,7 @@ class MainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_CLOSE, self.exitApp )
 		self.Bind( wx.EVT_MENU, self.addTorrent, id = self.addTorrentMenuItem.GetId() )
 		self.Bind( wx.EVT_MENU, self.showPrefs, id = self.prefMenuItem.GetId() )
+		self.Bind( wx.EVT_MENU, self.showAbout, id = self.aboutMenuItem.GetId() )
 		self.Bind( wx.EVT_TOOL, self.addTorrent, id = self.addButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.deleteTorrent, id = self.deleteButton.GetId() )
 		self.Bind( wx.EVT_TOOL, self.resumeTorrent, id = self.resumeButton.GetId() )
@@ -181,6 +184,9 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 
 	def showPrefs( self, event ):
+		event.Skip()
+
+	def showAbout( self, event ):
 		event.Skip()
 
 
@@ -229,11 +235,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText2.Wrap( -1 )
 
 		self.m_staticText2.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText2.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer10.Add( self.m_staticText2, 0, wx.ALL, 5 )
+		bSizer10.Add( self.m_staticText2, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.progressText = wx.StaticText( self, wx.ID_ANY, u"0%", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.progressText.Wrap( -1 )
+
+		self.progressText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer10.Add( self.progressText, 0, wx.ALL, 5 )
 
@@ -254,10 +263,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText3.Wrap( -1 )
 
 		self.m_staticText3.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText3.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer101.Add( self.m_staticText3, 0, wx.ALL, 5 )
+		bSizer101.Add( self.m_staticText3, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.nameText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.nameText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.nameText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer101.Add( self.nameText, 1, wx.ALL, 5 )
@@ -271,10 +282,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText32.Wrap( -1 )
 
 		self.m_staticText32.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText32.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer1012.Add( self.m_staticText32, 0, wx.ALL, 5 )
+		bSizer1012.Add( self.m_staticText32, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.sizeText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.sizeText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.sizeText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer1012.Add( self.sizeText, 1, wx.ALL, 5 )
@@ -288,10 +301,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText31.Wrap( -1 )
 
 		self.m_staticText31.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText31.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer1011.Add( self.m_staticText31, 0, wx.ALL, 5 )
+		bSizer1011.Add( self.m_staticText31, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.infohashText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.infohashText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.infohashText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer1011.Add( self.infohashText, 1, wx.ALL, 5 )
@@ -305,10 +320,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText34.Wrap( -1 )
 
 		self.m_staticText34.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText34.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer1014.Add( self.m_staticText34, 0, wx.ALL, 5 )
+		bSizer1014.Add( self.m_staticText34, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.pieceText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.pieceText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.pieceText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer1014.Add( self.pieceText, 1, wx.ALL, 5 )
@@ -322,10 +339,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText33.Wrap( -1 )
 
 		self.m_staticText33.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText33.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer1013.Add( self.m_staticText33, 0, wx.ALL, 5 )
+		bSizer1013.Add( self.m_staticText33, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.fileCountText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.fileCountText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.fileCountText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer1013.Add( self.fileCountText, 1, wx.ALL, 5 )
@@ -339,10 +358,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText341.Wrap( -1 )
 
 		self.m_staticText341.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText341.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer10141.Add( self.m_staticText341, 0, wx.ALL, 5 )
+		bSizer10141.Add( self.m_staticText341, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.downloadPathText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.downloadPathText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.downloadPathText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer10141.Add( self.downloadPathText, 1, wx.ALL, 5 )
@@ -356,10 +377,12 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText3411.Wrap( -1 )
 
 		self.m_staticText3411.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText3411.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer101411.Add( self.m_staticText3411, 0, wx.ALL, 5 )
+		bSizer101411.Add( self.m_staticText3411, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.announceUrlText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+		self.announceUrlText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 		self.announceUrlText.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer101411.Add( self.announceUrlText, 1, wx.ALL, 5 )
@@ -381,11 +404,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText35.Wrap( -1 )
 
 		self.m_staticText35.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText35.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer1015.Add( self.m_staticText35, 0, wx.ALL, 5 )
+		bSizer1015.Add( self.m_staticText35, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.dlRateText = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.dlRateText.Wrap( -1 )
+
+		self.dlRateText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer1015.Add( self.dlRateText, 1, wx.ALL, 5 )
 
@@ -398,11 +424,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText3622.Wrap( -1 )
 
 		self.m_staticText3622.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText3622.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer101622.Add( self.m_staticText3622, 0, wx.ALL, 5 )
+		bSizer101622.Add( self.m_staticText3622, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.etaText = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.etaText.Wrap( -1 )
+
+		self.etaText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer101622.Add( self.etaText, 1, wx.ALL, 5 )
 
@@ -415,11 +444,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText36.Wrap( -1 )
 
 		self.m_staticText36.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText36.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer1016.Add( self.m_staticText36, 0, wx.ALL, 5 )
+		bSizer1016.Add( self.m_staticText36, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.ulRateText = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.ulRateText.Wrap( -1 )
+
+		self.ulRateText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer1016.Add( self.ulRateText, 1, wx.ALL, 5 )
 
@@ -432,11 +464,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText361.Wrap( -1 )
 
 		self.m_staticText361.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText361.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer10161.Add( self.m_staticText361, 0, wx.ALL, 5 )
+		bSizer10161.Add( self.m_staticText361, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.dataDlText = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.dataDlText.Wrap( -1 )
+
+		self.dataDlText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer10161.Add( self.dataDlText, 1, wx.ALL, 5 )
 
@@ -449,11 +484,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText362.Wrap( -1 )
 
 		self.m_staticText362.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText362.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer10162.Add( self.m_staticText362, 0, wx.ALL, 5 )
+		bSizer10162.Add( self.m_staticText362, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.dataUlText = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.dataUlText.Wrap( -1 )
+
+		self.dataUlText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer10162.Add( self.dataUlText, 1, wx.ALL, 5 )
 
@@ -466,11 +504,14 @@ class SummaryPanel ( wx.Panel ):
 		self.m_staticText3621.Wrap( -1 )
 
 		self.m_staticText3621.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_staticText3621.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
-		bSizer101621.Add( self.m_staticText3621, 0, wx.ALL, 5 )
+		bSizer101621.Add( self.m_staticText3621, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 		self.peerCountText = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.peerCountText.Wrap( -1 )
+
+		self.peerCountText.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
 
 		bSizer101621.Add( self.peerCountText, 1, wx.ALL, 5 )
 
@@ -655,5 +696,76 @@ class ListPanel ( wx.Panel ):
 	def m_splitter3OnIdle( self, event ):
 		self.m_splitter3.SetSashPosition( 229 )
 		self.m_splitter3.Unbind( wx.EVT_IDLE )
+
+
+###########################################################################
+## Class AboutFrame
+###########################################################################
+
+class AboutFrame ( wx.Frame ):
+
+	def __init__( self, parent ):
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"dtorr about", pos = wx.DefaultPosition, size = wx.Size( 619,475 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+		bSizer33 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_bitmap1 = wx.StaticBitmap( self, wx.ID_ANY, wx.Bitmap( u"icons/dt.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer33.Add( self.m_bitmap1, 0, wx.ALL, 5 )
+
+		bSizer34 = wx.BoxSizer( wx.VERTICAL )
+
+		self.m_staticText25 = wx.StaticText( self, wx.ID_ANY, u"dtorr torrent client", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText25.Wrap( -1 )
+
+		self.m_staticText25.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
+
+		bSizer34.Add( self.m_staticText25, 0, wx.ALL, 5 )
+
+		self.m_staticText26 = wx.StaticText( self, wx.ID_ANY, u"© 2020 Darnell Andries", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText26.Wrap( -1 )
+
+		self.m_staticText26.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
+
+		bSizer34.Add( self.m_staticText26, 0, wx.ALL, 5 )
+
+		self.m_staticText27 = wx.StaticText( self, wx.ID_ANY, u"Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText27.Wrap( -1 )
+
+		self.m_staticText27.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_CAPTIONTEXT ) )
+
+		bSizer34.Add( self.m_staticText27, 1, wx.ALL|wx.EXPAND, 5 )
+
+		bSizer35 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+		bSizer35.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+		self.aboutCloseBtn = wx.Button( self, wx.ID_ANY, u"Close", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer35.Add( self.aboutCloseBtn, 0, wx.ALL, 5 )
+
+
+		bSizer34.Add( bSizer35, 0, wx.EXPAND, 5 )
+
+
+		bSizer33.Add( bSizer34, 1, wx.EXPAND, 5 )
+
+
+		self.SetSizer( bSizer33 )
+		self.Layout()
+
+		self.Centre( wx.BOTH )
+
+		# Connect Events
+		self.aboutCloseBtn.Bind( wx.EVT_BUTTON, self.actionClose )
+
+	def __del__( self ):
+		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def actionClose( self, event ):
+		event.Skip()
 
 

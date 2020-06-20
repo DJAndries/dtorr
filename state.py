@@ -35,9 +35,9 @@ def save_state():
   store.torrents_lock.acquire()
 
   for tid, torrent in store.torrents.items():
-    result_len = dlib.c_ulong(0)
+    result_len = dlib.c_ulonglong(0)
     torr_enc = dlib.save_state(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config), torrent.contents,
-                               dlib.POINTER(dlib.c_ulong)(result_len))
+                               dlib.POINTER(dlib.c_ulonglong)(result_len))
     if result_len.value == 0:
       continue
 

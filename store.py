@@ -16,19 +16,20 @@ class Status(enum.Enum):
   DOWNLOADING = 2
   SEEDING = 3
   FAILED = 4
+  ALLOCATING = 5
 
 class TorrentInstance:
   def __init__(self, contents, status):
     self.status = status
     self.contents = contents
 
-def add_torrent(path, tid=None, status=Status.DOWNLOADING):
+def add_torrent(path, tid=None, status=Status.ALLOCATING):
   global next_id
   with open(path, 'rb') as f:
     file_contents = f.read()
     torr_struct = dlib.load_torrent_metadata(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config),
                                     dlib.String(dlib.UserString(file_contents)),
-                                    dlib.c_ulong(len(file_contents)))
+                                    dlib.c_ulonglong(len(file_contents)))
     if not torr_struct:
       raise Exception('Error loading torrent. See log for details.')
 
@@ -43,9 +44,6 @@ def add_torrent(path, tid=None, status=Status.DOWNLOADING):
     torr_struct.contents.me.peer_id = os.urandom(20)
 
     os.makedirs(download_dir, exist_ok=True)
-
-    if dlib.init_torrent_files(dlib.POINTER(dlib.dtorr_config)(config.dtorr_config), torr_struct) != 0:
-      raise Exception('Failed to init torrent files. See log for details.')
 
     torrent_instance = TorrentInstance(torr_struct, status)
 

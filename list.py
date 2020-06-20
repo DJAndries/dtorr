@@ -41,7 +41,7 @@ class FullListPanel(ListPanel):
     download_rate = ''
     eta = ''
 
-    progress = int(torr_instance.contents.contents.downloaded) / int(torr_instance.contents.contents.length) * 100
+    progress = int(int(torr_instance.contents.contents.downloaded) / int(torr_instance.contents.contents.length) * 100)
     self.torrentList.SetValue(progress, index, 3)
 
     if is_active:

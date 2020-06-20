@@ -10,12 +10,13 @@ import log
 import sys
 import state
 import port
-from forms import MainFrame, PrefDialog
+from forms import MainFrame, PrefDialog, AboutFrame
 from list import FullListPanel
 
 app = wx.App()
 
 manage_thread = manage.TorrentManageThread()
+allocate_thread = manage.TorrentAllocateThread()
 
 class FullMainFrame(MainFrame):
   def __init__(self, parent):
@@ -115,13 +116,22 @@ class FullMainFrame(MainFrame):
   def showPrefs(self, event):
     prefs.show_editor(self)
 
+  def showAbout(self, event):
+    about.Show(True)
+
   def exitApp(self, event):
     manage_thread.stop()
+    allocate_thread.stop()
     state.save_state()
     port.clean_port()
     sys.exit()
 
+class FullAboutFrame(AboutFrame):
+  def actionClose(self, event):
+    self.Show(False)
+
 frame = FullMainFrame(None)
+about = FullAboutFrame(frame)
 
 details.populate_notebook(frame.torrentDetailsNotebook)
 
@@ -147,6 +157,7 @@ frame.listPanel.renderFullList()
 config.dtorr_config.port = port.port_info.port
 
 manage_thread.start()
+allocate_thread.start()
 
 app.MainLoop()
 

@@ -7,7 +7,7 @@ summary = None
 def populate_notebook(notebook):
   global summary
   summary = SummaryPanel(notebook)
-  notebook.AddPage(summary, "Summary", True, 0)
+  notebook.InsertPage(0, summary, "Summary", True, -1)
 
 def update_summary_info(torr_instance):
   name = ''
