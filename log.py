@@ -1,10 +1,5 @@
 
-log_labels = [
-  'ERROR',
-  'WARN',
-  'INFO',
-  'DEBUG'
-]
+log_labels = ['', 'ERROR', 'WARN', 'INFO', 'DEBUG']
 
 log_buf = ''
 log_len = 0
@@ -12,7 +7,7 @@ log_new = False
 def handle_log(log_level, content):
   global log_buf, log_new, log_len
 
-  entry = '[{}] {}\n'.format(log_labels[int(log_level) - 1], content)
+  entry = '[{}] {}\n'.format(log_labels[int(log_level)], str(content))
   log_buf += entry
 
   log_len += len(entry)
