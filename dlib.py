@@ -824,9 +824,9 @@ _libs["dtorr"] = load_library("dtorr")
 
 # No modules
 
-SOCKET = c_int# ../dtorr/include/dtorr/structs.h: 11
+SOCKET = c_int# ../dtorr/include/dtorr/structs.h: 10
 
-# ../dtorr/include/dtorr/structs.h: 19
+# ../dtorr/include/dtorr/structs.h: 15
 class struct_dtorr_node(Structure):
     pass
 
@@ -841,9 +841,9 @@ struct_dtorr_node._fields_ = [
     ('len', c_ulonglong),
 ]
 
-dtorr_node = struct_dtorr_node# ../dtorr/include/dtorr/structs.h: 24
+dtorr_node = struct_dtorr_node# ../dtorr/include/dtorr/structs.h: 20
 
-# ../dtorr/include/dtorr/structs.h: 26
+# ../dtorr/include/dtorr/structs.h: 22
 class struct_dtorr_hashnode(Structure):
     pass
 
@@ -856,9 +856,9 @@ struct_dtorr_hashnode._fields_ = [
     ('value', POINTER(None)),
 ]
 
-dtorr_hashnode = struct_dtorr_hashnode# ../dtorr/include/dtorr/structs.h: 30
+dtorr_hashnode = struct_dtorr_hashnode# ../dtorr/include/dtorr/structs.h: 26
 
-# ../dtorr/include/dtorr/structs.h: 32
+# ../dtorr/include/dtorr/structs.h: 28
 class struct_dtorr_hashmap(Structure):
     pass
 
@@ -873,13 +873,13 @@ struct_dtorr_hashmap._fields_ = [
     ('entry_count', c_ulonglong),
 ]
 
-dtorr_hashmap = struct_dtorr_hashmap# ../dtorr/include/dtorr/structs.h: 37
+dtorr_hashmap = struct_dtorr_hashmap# ../dtorr/include/dtorr/structs.h: 33
 
-# ../dtorr/include/dtorr/structs.h: 40
+# ../dtorr/include/dtorr/structs.h: 36
 class struct_dtorr_listnode(Structure):
     pass
 
-dtorr_listnode = struct_dtorr_listnode# ../dtorr/include/dtorr/structs.h: 39
+dtorr_listnode = struct_dtorr_listnode# ../dtorr/include/dtorr/structs.h: 35
 
 struct_dtorr_listnode.__slots__ = [
     'value',
@@ -890,7 +890,7 @@ struct_dtorr_listnode._fields_ = [
     ('next', POINTER(dtorr_listnode)),
 ]
 
-# ../dtorr/include/dtorr/structs.h: 45
+# ../dtorr/include/dtorr/structs.h: 41
 class struct_dtorr_file(Structure):
     pass
 
@@ -905,9 +905,9 @@ struct_dtorr_file._fields_ = [
     ('length', c_ulonglong),
 ]
 
-dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 50
+dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 46
 
-# ../dtorr/include/dtorr/structs.h: 52
+# ../dtorr/include/dtorr/structs.h: 48
 class struct_dtorr_peer(Structure):
     pass
 
@@ -923,6 +923,9 @@ struct_dtorr_peer.__slots__ = [
     'we_interested',
     'bad',
     'bitfield',
+    'unsent_data',
+    'unsent_data_offset',
+    'unsent_data_length',
     'out_piece_requests',
     'sent_request_count',
     'total_out_request_count',
@@ -943,6 +946,9 @@ struct_dtorr_peer._fields_ = [
     ('we_interested', c_char),
     ('bad', c_char),
     ('bitfield', String),
+    ('unsent_data', String),
+    ('unsent_data_offset', c_ulonglong),
+    ('unsent_data_length', c_ulonglong),
     ('out_piece_requests', POINTER(dtorr_listnode)),
     ('sent_request_count', c_ulonglong),
     ('total_out_request_count', c_ulonglong),
@@ -1173,17 +1179,17 @@ try:
 except:
     pass
 
-dtorr_node = struct_dtorr_node# ../dtorr/include/dtorr/structs.h: 19
+dtorr_node = struct_dtorr_node# ../dtorr/include/dtorr/structs.h: 15
 
-dtorr_hashnode = struct_dtorr_hashnode# ../dtorr/include/dtorr/structs.h: 26
+dtorr_hashnode = struct_dtorr_hashnode# ../dtorr/include/dtorr/structs.h: 22
 
-dtorr_hashmap = struct_dtorr_hashmap# ../dtorr/include/dtorr/structs.h: 32
+dtorr_hashmap = struct_dtorr_hashmap# ../dtorr/include/dtorr/structs.h: 28
 
-dtorr_listnode = struct_dtorr_listnode# ../dtorr/include/dtorr/structs.h: 40
+dtorr_listnode = struct_dtorr_listnode# ../dtorr/include/dtorr/structs.h: 36
 
-dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 45
+dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 41
 
-dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 52
+dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 48
 
 dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 78
 
