@@ -924,8 +924,7 @@ struct_dtorr_peer.__slots__ = [
     'bad',
     'bitfield',
     'unsent_data',
-    'unsent_data_offset',
-    'unsent_data_length',
+    'unsent_data_count',
     'out_piece_requests',
     'sent_request_count',
     'total_out_request_count',
@@ -946,9 +945,8 @@ struct_dtorr_peer._fields_ = [
     ('we_interested', c_char),
     ('bad', c_char),
     ('bitfield', String),
-    ('unsent_data', String),
-    ('unsent_data_offset', c_ulonglong),
-    ('unsent_data_length', c_ulonglong),
+    ('unsent_data', POINTER(dtorr_listnode)),
+    ('unsent_data_count', c_ulonglong),
     ('out_piece_requests', POINTER(dtorr_listnode)),
     ('sent_request_count', c_ulonglong),
     ('total_out_request_count', c_ulonglong),
@@ -958,9 +956,9 @@ struct_dtorr_peer._fields_ = [
     ('curr_in_piece', String),
 ]
 
-dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 76
+dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 75
 
-# ../dtorr/include/dtorr/structs.h: 78
+# ../dtorr/include/dtorr/structs.h: 77
 class struct_dtorr_torrent(Structure):
     pass
 
@@ -1027,9 +1025,9 @@ struct_dtorr_torrent._fields_ = [
     ('last_metrics_time', c_ulonglong),
 ]
 
-dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 116
+dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 115
 
-# ../dtorr/include/dtorr/structs.h: 118
+# ../dtorr/include/dtorr/structs.h: 117
 class struct_dtorr_config(Structure):
     pass
 
@@ -1048,9 +1046,9 @@ struct_dtorr_config._fields_ = [
     ('serv_sock', SOCKET),
 ]
 
-dtorr_config = struct_dtorr_config# ../dtorr/include/dtorr/structs.h: 127
+dtorr_config = struct_dtorr_config# ../dtorr/include/dtorr/structs.h: 126
 
-# ../dtorr/include/dtorr/structs.h: 129
+# ../dtorr/include/dtorr/structs.h: 128
 class struct_dtorr_piece_request(Structure):
     pass
 
@@ -1067,7 +1065,7 @@ struct_dtorr_piece_request._fields_ = [
     ('request_sent', c_char),
 ]
 
-dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 135
+dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 134
 
 # /home/darnell/Work/dtorr/include/dtorr/bencoding_decode.h: 6
 if _libs["dtorr"].has("bencoding_decode", "cdecl"):
@@ -1191,11 +1189,11 @@ dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 41
 
 dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 48
 
-dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 78
+dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 77
 
-dtorr_config = struct_dtorr_config# ../dtorr/include/dtorr/structs.h: 118
+dtorr_config = struct_dtorr_config# ../dtorr/include/dtorr/structs.h: 117
 
-dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 129
+dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 128
 
 # No inserted files
 
