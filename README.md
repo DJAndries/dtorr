@@ -30,3 +30,7 @@ Create a Python venv if you wish (`python -m venv env` and `env/bin/activate`).
 Install the Python dependencies: `pip install -r requirements.txt`
 
 Run the application: `python main.py`
+
+## Limitations
+
+See [libdtorr](https://github.com/djandries/libdtorr) for limitations
