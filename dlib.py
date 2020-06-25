@@ -1,7 +1,7 @@
 r"""Wrapper for bencoding_decode.h
 
 Generated with:
-/home/darnell/Work/dtorr-ui/env/bin/ctypesgen -I ../dtorr/include -L ../dtorr/lib -ldtorr ../dtorr/include/dtorr/bencoding_decode.h ../dtorr/include/dtorr/bencoding_encode.h ../dtorr/include/dtorr/dtorr.h ../dtorr/include/dtorr/fs.h ../dtorr/include/dtorr/manager.h ../dtorr/include/dtorr/metadata.h ../dtorr/include/dtorr/server.h ../dtorr/include/dtorr/state_persist.h ../dtorr/include/dtorr/structs.h -o dlib.py
+/home/darnell/Work/dtorr/env/bin/ctypesgen -I ../libdtorr/include -L ../libdtorr/lib -ldtorr ../libdtorr/include/dtorr/bencoding_decode.h ../libdtorr/include/dtorr/bencoding_encode.h ../libdtorr/include/dtorr/dtorr.h ../libdtorr/include/dtorr/fs.h ../libdtorr/include/dtorr/manager.h ../libdtorr/include/dtorr/metadata.h ../libdtorr/include/dtorr/server.h ../libdtorr/include/dtorr/state_persist.h ../libdtorr/include/dtorr/structs.h -o dlib.py
 
 Do not modify this file.
 """
@@ -444,7 +444,7 @@ def ord_if_char(value):
 # End preamble
 
 _libs = {}
-_libdirs = ['../dtorr/lib']
+_libdirs = ['../libdtorr/lib']
 
 # Begin loader
 
@@ -814,7 +814,7 @@ del loaderclass
 
 # End loader
 
-add_library_search_dirs(['../dtorr/lib'])
+add_library_search_dirs(['../libdtorr/lib'])
 
 # Begin libraries
 _libs["dtorr"] = load_library("dtorr")
@@ -824,9 +824,9 @@ _libs["dtorr"] = load_library("dtorr")
 
 # No modules
 
-SOCKET = c_int# ../dtorr/include/dtorr/structs.h: 10
+SOCKET = c_int# ../libdtorr/include/dtorr/structs.h: 10
 
-# ../dtorr/include/dtorr/structs.h: 15
+# ../libdtorr/include/dtorr/structs.h: 15
 class struct_dtorr_node(Structure):
     pass
 
@@ -841,9 +841,9 @@ struct_dtorr_node._fields_ = [
     ('len', c_ulonglong),
 ]
 
-dtorr_node = struct_dtorr_node# ../dtorr/include/dtorr/structs.h: 20
+dtorr_node = struct_dtorr_node# ../libdtorr/include/dtorr/structs.h: 20
 
-# ../dtorr/include/dtorr/structs.h: 22
+# ../libdtorr/include/dtorr/structs.h: 22
 class struct_dtorr_hashnode(Structure):
     pass
 
@@ -856,9 +856,9 @@ struct_dtorr_hashnode._fields_ = [
     ('value', POINTER(None)),
 ]
 
-dtorr_hashnode = struct_dtorr_hashnode# ../dtorr/include/dtorr/structs.h: 26
+dtorr_hashnode = struct_dtorr_hashnode# ../libdtorr/include/dtorr/structs.h: 26
 
-# ../dtorr/include/dtorr/structs.h: 28
+# ../libdtorr/include/dtorr/structs.h: 28
 class struct_dtorr_hashmap(Structure):
     pass
 
@@ -873,13 +873,13 @@ struct_dtorr_hashmap._fields_ = [
     ('entry_count', c_ulonglong),
 ]
 
-dtorr_hashmap = struct_dtorr_hashmap# ../dtorr/include/dtorr/structs.h: 33
+dtorr_hashmap = struct_dtorr_hashmap# ../libdtorr/include/dtorr/structs.h: 33
 
-# ../dtorr/include/dtorr/structs.h: 36
+# ../libdtorr/include/dtorr/structs.h: 36
 class struct_dtorr_listnode(Structure):
     pass
 
-dtorr_listnode = struct_dtorr_listnode# ../dtorr/include/dtorr/structs.h: 35
+dtorr_listnode = struct_dtorr_listnode# ../libdtorr/include/dtorr/structs.h: 35
 
 struct_dtorr_listnode.__slots__ = [
     'value',
@@ -890,7 +890,7 @@ struct_dtorr_listnode._fields_ = [
     ('next', POINTER(dtorr_listnode)),
 ]
 
-# ../dtorr/include/dtorr/structs.h: 41
+# ../libdtorr/include/dtorr/structs.h: 41
 class struct_dtorr_file(Structure):
     pass
 
@@ -905,9 +905,9 @@ struct_dtorr_file._fields_ = [
     ('length', c_ulonglong),
 ]
 
-dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 46
+dtorr_file = struct_dtorr_file# ../libdtorr/include/dtorr/structs.h: 46
 
-# ../dtorr/include/dtorr/structs.h: 48
+# ../libdtorr/include/dtorr/structs.h: 48
 class struct_dtorr_peer(Structure):
     pass
 
@@ -956,9 +956,9 @@ struct_dtorr_peer._fields_ = [
     ('curr_in_piece', String),
 ]
 
-dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 75
+dtorr_peer = struct_dtorr_peer# ../libdtorr/include/dtorr/structs.h: 75
 
-# ../dtorr/include/dtorr/structs.h: 77
+# ../libdtorr/include/dtorr/structs.h: 77
 class struct_dtorr_torrent(Structure):
     pass
 
@@ -1025,9 +1025,9 @@ struct_dtorr_torrent._fields_ = [
     ('last_metrics_time', c_ulonglong),
 ]
 
-dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 115
+dtorr_torrent = struct_dtorr_torrent# ../libdtorr/include/dtorr/structs.h: 115
 
-# ../dtorr/include/dtorr/structs.h: 117
+# ../libdtorr/include/dtorr/structs.h: 117
 class struct_dtorr_config(Structure):
     pass
 
@@ -1046,9 +1046,9 @@ struct_dtorr_config._fields_ = [
     ('serv_sock', SOCKET),
 ]
 
-dtorr_config = struct_dtorr_config# ../dtorr/include/dtorr/structs.h: 126
+dtorr_config = struct_dtorr_config# ../libdtorr/include/dtorr/structs.h: 126
 
-# ../dtorr/include/dtorr/structs.h: 128
+# ../libdtorr/include/dtorr/structs.h: 128
 class struct_dtorr_piece_request(Structure):
     pass
 
@@ -1065,15 +1065,15 @@ struct_dtorr_piece_request._fields_ = [
     ('request_sent', c_char),
 ]
 
-dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 134
+dtorr_piece_request = struct_dtorr_piece_request# ../libdtorr/include/dtorr/structs.h: 134
 
-# /home/darnell/Work/dtorr/include/dtorr/bencoding_decode.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/bencoding_decode.h: 6
 if _libs["dtorr"].has("bencoding_decode", "cdecl"):
     bencoding_decode = _libs["dtorr"].get("bencoding_decode", "cdecl")
     bencoding_decode.argtypes = [POINTER(dtorr_config), String, c_ulonglong]
     bencoding_decode.restype = POINTER(dtorr_node)
 
-# /home/darnell/Work/dtorr/include/dtorr/bencoding_encode.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/bencoding_encode.h: 6
 if _libs["dtorr"].has("bencoding_encode", "cdecl"):
     bencoding_encode = _libs["dtorr"].get("bencoding_encode", "cdecl")
     bencoding_encode.argtypes = [POINTER(dtorr_config), POINTER(dtorr_node), POINTER(c_ulonglong)]
@@ -1083,61 +1083,61 @@ if _libs["dtorr"].has("bencoding_encode", "cdecl"):
         bencoding_encode.restype = String
         bencoding_encode.errcheck = ReturnString
 
-# /home/darnell/Work/dtorr/include/dtorr/dtorr.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/dtorr.h: 6
 if _libs["dtorr"].has("dtorr_init", "cdecl"):
     dtorr_init = _libs["dtorr"].get("dtorr_init", "cdecl")
     dtorr_init.argtypes = []
     dtorr_init.restype = c_int
 
-# /home/darnell/Work/dtorr/include/dtorr/dtorr.h: 8
+# /home/darnell/Work/libdtorr/include/dtorr/dtorr.h: 8
 if _libs["dtorr"].has("mfree", "cdecl"):
     mfree = _libs["dtorr"].get("mfree", "cdecl")
     mfree.argtypes = [POINTER(None)]
     mfree.restype = None
 
-# /home/darnell/Work/dtorr/include/dtorr/fs.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/fs.h: 6
 if _libs["dtorr"].has("init_torrent_files", "cdecl"):
     init_torrent_files = _libs["dtorr"].get("init_torrent_files", "cdecl")
     init_torrent_files.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent)]
     init_torrent_files.restype = c_int
 
-# /home/darnell/Work/dtorr/include/dtorr/fs.h: 8
+# /home/darnell/Work/libdtorr/include/dtorr/fs.h: 8
 if _libs["dtorr"].has("rw_piece", "cdecl"):
     rw_piece = _libs["dtorr"].get("rw_piece", "cdecl")
     rw_piece.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent), c_ulonglong, String, c_ulonglong, c_char]
     rw_piece.restype = c_int
 
-# /home/darnell/Work/dtorr/include/dtorr/manager.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/manager.h: 6
 if _libs["dtorr"].has("manage_torrent", "cdecl"):
     manage_torrent = _libs["dtorr"].get("manage_torrent", "cdecl")
     manage_torrent.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent)]
     manage_torrent.restype = c_int
 
-# /home/darnell/Work/dtorr/include/dtorr/metadata.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/metadata.h: 6
 if _libs["dtorr"].has("load_torrent_metadata", "cdecl"):
     load_torrent_metadata = _libs["dtorr"].get("load_torrent_metadata", "cdecl")
     load_torrent_metadata.argtypes = [POINTER(dtorr_config), String, c_ulonglong]
     load_torrent_metadata.restype = POINTER(dtorr_torrent)
 
-# /home/darnell/Work/dtorr/include/dtorr/metadata.h: 8
+# /home/darnell/Work/libdtorr/include/dtorr/metadata.h: 8
 if _libs["dtorr"].has("free_torrent", "cdecl"):
     free_torrent = _libs["dtorr"].get("free_torrent", "cdecl")
     free_torrent.argtypes = [POINTER(dtorr_torrent)]
     free_torrent.restype = None
 
-# /home/darnell/Work/dtorr/include/dtorr/server.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/server.h: 6
 if _libs["dtorr"].has("peer_server_start", "cdecl"):
     peer_server_start = _libs["dtorr"].get("peer_server_start", "cdecl")
     peer_server_start.argtypes = [POINTER(dtorr_config)]
     peer_server_start.restype = c_int
 
-# /home/darnell/Work/dtorr/include/dtorr/server.h: 8
+# /home/darnell/Work/libdtorr/include/dtorr/server.h: 8
 if _libs["dtorr"].has("peer_server_accept", "cdecl"):
     peer_server_accept = _libs["dtorr"].get("peer_server_accept", "cdecl")
     peer_server_accept.argtypes = [POINTER(dtorr_config)]
     peer_server_accept.restype = c_int
 
-# /home/darnell/Work/dtorr/include/dtorr/state_persist.h: 6
+# /home/darnell/Work/libdtorr/include/dtorr/state_persist.h: 6
 if _libs["dtorr"].has("save_state", "cdecl"):
     save_state = _libs["dtorr"].get("save_state", "cdecl")
     save_state.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent), POINTER(c_ulonglong)]
@@ -1147,53 +1147,53 @@ if _libs["dtorr"].has("save_state", "cdecl"):
         save_state.restype = String
         save_state.errcheck = ReturnString
 
-# /home/darnell/Work/dtorr/include/dtorr/state_persist.h: 7
+# /home/darnell/Work/libdtorr/include/dtorr/state_persist.h: 7
 if _libs["dtorr"].has("parse_state", "cdecl"):
     parse_state = _libs["dtorr"].get("parse_state", "cdecl")
     parse_state.argtypes = [POINTER(dtorr_config), POINTER(dtorr_torrent)]
     parse_state.restype = c_int
 
-# ../dtorr/include/dtorr/structs.h: 4
+# ../libdtorr/include/dtorr/structs.h: 4
 try:
     DTORR_DICT = 1
 except:
     pass
 
-# ../dtorr/include/dtorr/structs.h: 5
+# ../libdtorr/include/dtorr/structs.h: 5
 try:
     DTORR_STR = 2
 except:
     pass
 
-# ../dtorr/include/dtorr/structs.h: 6
+# ../libdtorr/include/dtorr/structs.h: 6
 try:
     DTORR_LIST = 3
 except:
     pass
 
-# ../dtorr/include/dtorr/structs.h: 7
+# ../libdtorr/include/dtorr/structs.h: 7
 try:
     DTORR_NUM = 4
 except:
     pass
 
-dtorr_node = struct_dtorr_node# ../dtorr/include/dtorr/structs.h: 15
+dtorr_node = struct_dtorr_node# ../libdtorr/include/dtorr/structs.h: 15
 
-dtorr_hashnode = struct_dtorr_hashnode# ../dtorr/include/dtorr/structs.h: 22
+dtorr_hashnode = struct_dtorr_hashnode# ../libdtorr/include/dtorr/structs.h: 22
 
-dtorr_hashmap = struct_dtorr_hashmap# ../dtorr/include/dtorr/structs.h: 28
+dtorr_hashmap = struct_dtorr_hashmap# ../libdtorr/include/dtorr/structs.h: 28
 
-dtorr_listnode = struct_dtorr_listnode# ../dtorr/include/dtorr/structs.h: 36
+dtorr_listnode = struct_dtorr_listnode# ../libdtorr/include/dtorr/structs.h: 36
 
-dtorr_file = struct_dtorr_file# ../dtorr/include/dtorr/structs.h: 41
+dtorr_file = struct_dtorr_file# ../libdtorr/include/dtorr/structs.h: 41
 
-dtorr_peer = struct_dtorr_peer# ../dtorr/include/dtorr/structs.h: 48
+dtorr_peer = struct_dtorr_peer# ../libdtorr/include/dtorr/structs.h: 48
 
-dtorr_torrent = struct_dtorr_torrent# ../dtorr/include/dtorr/structs.h: 77
+dtorr_torrent = struct_dtorr_torrent# ../libdtorr/include/dtorr/structs.h: 77
 
-dtorr_config = struct_dtorr_config# ../dtorr/include/dtorr/structs.h: 117
+dtorr_config = struct_dtorr_config# ../libdtorr/include/dtorr/structs.h: 117
 
-dtorr_piece_request = struct_dtorr_piece_request# ../dtorr/include/dtorr/structs.h: 128
+dtorr_piece_request = struct_dtorr_piece_request# ../libdtorr/include/dtorr/structs.h: 128
 
 # No inserted files
 

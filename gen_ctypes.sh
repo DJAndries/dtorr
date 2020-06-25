@@ -1,2 +1,2 @@
 #!/bin/sh
-ctypesgen -I ../dtorr/include -L ../dtorr/lib -ldtorr ../dtorr/include/dtorr/*.h -o dlib.py
+ctypesgen -I ../libdtorr/include -L ../libdtorr/lib -ldtorr ../libdtorr/include/dtorr/*.h -o dlib.py
