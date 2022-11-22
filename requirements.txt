@@ -1,6 +1,6 @@
 miniupnpc==2.0.2
 numpy==1.18.5
-Pillow==7.1.2
+Pillow==9.3.0
 PyYAML==5.3.1
 six==1.15.0
 wxPython==4.1.0
